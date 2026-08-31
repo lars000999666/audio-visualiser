@@ -56,7 +56,16 @@ body {
     left: 50vw;
     width: 0;
     height: 0;
+
+    animation: spiral 40s ease-in-out infinite alternate;
 }
+
+@keyframes spiral {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate(6%, -4%) scale(1.15) rotate(8deg); }
+    100% { transform: translate(-5%, 5%) scale(0.95) rotate(-6deg); }
+}
+
 .visualizer-container__bar {
     position: absolute;
     background: rgb(223, 221, 221);
