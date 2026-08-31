@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #272933;
+}
 .background {
     position: absolute;
     z-index: 0;
@@ -9,25 +15,6 @@
     background-position: center center;
     background-size: cover;
     filter: blur(15px);
-}
-.track-title {
-    position: absolute;
-    z-index: 2;
-    top: 10vh;
-    right: 0;
-    left: 0;
-    color: white;
-    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
-    font-size: 6vw;
-    text-align: center;
-}
-.visualizer-container {
-    position: absolute;
-    z-index: 3;
-    top: 50vh;
-    left: 50vw;
-    width: 0;
-    height: 0;
 }
 .smoke {
     position: absolute;
@@ -50,4 +37,36 @@
     0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
     50%  { transform: translate(6%, -4%) scale(1.15) rotate(8deg); }
     100% { transform: translate(-5%, 5%) scale(0.95) rotate(-6deg); }
+}
+.track-title {
+    position: absolute;
+    z-index: 2;
+    top: 10vh;
+    right: 0;
+    left: 0;
+    color: white;
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+    font-size: 6vw;
+    text-align: center;
+}
+.visualizer-container {
+    position: absolute;
+    z-index: 2;
+    top: 50vh;
+    left: 50vw;
+    width: 0;
+    height: 0;
+}
+.visualizer-container__bar {
+    position: absolute;
+    background: rgb(223, 221, 221);
+    border-radius: 2px;
+    transform-origin: 50% 100%;
+    transition: transform 0.05s linear;
+}
+audio {
+    position: relative;
+    z-index: 3;
+    background-color: rgba(255, 255, 255, 0);
+    top: 1em;
 }
