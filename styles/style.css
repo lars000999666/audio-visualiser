@@ -2,6 +2,7 @@ body {
     margin: 0;
     height: 100vh;
     overflow: hidden;
+    background-color: #16171d;
 }
 .background {
     position: absolute;
@@ -44,4 +45,30 @@ audio {
     position: relative;
     top: 1em;
     z-index: 2;
+}
+
+
+.smoke {
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    right: -20%;
+    bottom: -20%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.85;
+    mix-blend-mode: screen;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(circle at 75% 65%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%);
+    filter: blur(30px);
+    animation: smokeDrift 40s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+@keyframes smokeDrift {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate(6%, -4%) scale(1.15) rotate(8deg); }
+    100% { transform: translate(-5%, 5%) scale(0.95) rotate(-6deg); }
 }
