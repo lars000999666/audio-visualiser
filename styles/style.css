@@ -46,6 +46,49 @@ audio {
     top: 1em;
     z-index: 2;
 }
+.player-controls {
+    position: absolute;
+    z-index: 3;
+    bottom: 6vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.play-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.play-btn:hover {
+    background: rgba(255,255,255,0.18);
+}
+.play-btn svg {
+    width: 18px;
+    height: 18px;
+}
+.progress-track {
+    width: 220px;
+    height: 3px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: white;
+}
+
 .smoke {
     position: absolute;
     top: -20%;
