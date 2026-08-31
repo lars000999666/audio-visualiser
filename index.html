@@ -14,6 +14,18 @@
 <div class="smoke"></div>
 <div class="track-title"></div>
 <div class="visualizer-container"></div>
+
+<div class="sequencer">
+    <div class="sequencer-header">
+        <button class="seq-play-btn">▶ Play Beat</button>
+        <label class="seq-tempo">
+            BPM <input type="range" min="60" max="180" value="120" class="seq-tempo-slider">
+            <span class="seq-tempo-value">120</span>
+        </label>
+    </div>
+    <div class="sequencer-grid"></div>
+</div>
+
 <script>
     (function () {
         // Spiral layout settings
@@ -78,6 +90,126 @@
                 ctx.resume();
             }
         });
+
+
+
+
+        ///////
+        // ---- Step sequencer ----
+const SEQ_ROWS = [
+    { label: "Hi",   type: "melodic", freq: 880, waveform: "triangle" },
+    { label: "Mid",  type: "melodic", freq: 440, waveform: "sine" },
+    { label: "Low",  type: "melodic", freq: 220, waveform: "sawtooth" },
+    { label: "Kick", type: "kick" }
+];
+const NBR_OF_STEPS = 16;
+
+function playNote(freq, waveform, duration = 0.15) {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = waveform;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.3, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    osc.connect(gain);
+    gain.connect(analyzer);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.05);
+}
+
+function playKick() {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+    gain.gain.setValueAtTime(0.6, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    osc.connect(gain);
+    gain.connect(analyzer);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+}
+
+const seqGrid = document.querySelector(".sequencer-grid");
+SEQ_ROWS.forEach((row, rowIndex) => {
+    const rowEl = document.createElement("div");
+    rowEl.className = "seq-row";
+
+    const labelEl = document.createElement("div");
+    labelEl.className = "seq-row-label";
+    labelEl.textContent = row.label;
+    rowEl.appendChild(labelEl);
+
+    for (let step = 0; step < NBR_OF_STEPS; step++) {
+        const stepEl = document.createElement("button");
+        stepEl.className = "seq-step";
+        stepEl.dataset.row = rowIndex;
+        stepEl.dataset.step = step;
+        stepEl.addEventListener("click", () => stepEl.classList.toggle("active"));
+        rowEl.appendChild(stepEl);
+    }
+    seqGrid.appendChild(rowEl);
+});
+
+const playBtn = document.querySelector(".seq-play-btn");
+const tempoSlider = document.querySelector(".seq-tempo-slider");
+const tempoValueLabel = document.querySelector(".seq-tempo-value");
+
+let currentStep = 0;
+let seqInterval = null;
+let isSeqPlaying = false;
+
+function stepIntervalMs() {
+    const bpm = parseInt(tempoSlider.value, 10);
+    return (60000 / bpm) / 4; // 16th notes
+}
+
+function advanceStep() {
+    document.querySelectorAll(".seq-step.current").forEach(el => el.classList.remove("current"));
+    SEQ_ROWS.forEach((row, rowIndex) => {
+        const stepEl = document.querySelector(`.seq-step[data-row="${rowIndex}"][data-step="${currentStep}"]`);
+        if (!stepEl) return;
+        stepEl.classList.add("current");
+        if (stepEl.classList.contains("active")) {
+            row.type === "kick" ? playKick() : playNote(row.freq, row.waveform);
+        }
+    });
+    currentStep = (currentStep + 1) % NBR_OF_STEPS;
+}
+
+function startSequencer() {
+    if (ctx.state === "suspended") ctx.resume();
+    isSeqPlaying = true;
+    playBtn.textContent = "■ Stop";
+    currentStep = 0;
+    seqInterval = setInterval(advanceStep, stepIntervalMs());
+}
+
+function stopSequencer() {
+    isSeqPlaying = false;
+    playBtn.textContent = "▶ Play Beat";
+    clearInterval(seqInterval);
+    document.querySelectorAll(".seq-step.current").forEach(el => el.classList.remove("current"));
+}
+
+playBtn.addEventListener("click", () => isSeqPlaying ? stopSequencer() : startSequencer());
+
+tempoSlider.addEventListener("input", () => {
+    tempoValueLabel.textContent = tempoSlider.value;
+    if (isSeqPlaying) {
+        clearInterval(seqInterval);
+        seqInterval = setInterval(advanceStep, stepIntervalMs());
+    }
+});
+
+
+
     })();
 </script>
 </body>
