@@ -1,6 +1,6 @@
 .background {
-    
-    z-index: 0;
+    position: absolute;
+    z-index: -1;
     background-color: rgba(54, 55, 67, 0.761);
     top: -50px;
     right: -50px;
