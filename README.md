@@ -1,6 +1,6 @@
 Link to the audio visualiser
 
-https://lars000999666.github.io/audio-visualiser/audioplayer.html
+[https://lars000999666.github.io/audio-visualiser/audioplayer.html](https://lars000999666.github.io/audio-visualiser/)
 
 I do not own the rights to the audio. Let me know if i should remove it.
 
