@@ -87,6 +87,34 @@
                 ctx.resume();
             }
         });
+
+        const playBtn = document.querySelector(".play-btn");
+        const iconPlay = document.querySelector(".icon-play");
+        const iconPause = document.querySelector(".icon-pause");
+        const progressFill = document.querySelector(".progress-fill");
+        const progressTrack = document.querySelector(".progress-track");
+        
+            playBtn.addEventListener("click", () => {
+                if (ctx.state === "suspended") ctx.resume();
+                audio.paused ? audio.play() : audio.pause();
+            });
+            
+            audio.addEventListener("play", () => {
+                iconPlay.style.display = "none";
+                iconPause.style.display = "block";
+            });
+            audio.addEventListener("pause", () => {
+                iconPlay.style.display = "block";
+                iconPause.style.display = "none";
+            });
+            audio.addEventListener("timeupdate", () => {
+                if (!audio.duration) return;
+                progressFill.style.width = (audio.currentTime / audio.duration) * 100 + "%";
+            });
+            progressTrack.addEventListener("click", (e) => {
+                const rect = progressTrack.getBoundingClientRect();
+                audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+        });        
     })();
 </script>
 </body>
