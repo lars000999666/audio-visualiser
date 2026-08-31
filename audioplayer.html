@@ -1,0 +1,83 @@
+<!-- License MIT, Author Special Agent Squeaky (specialagentsqueaky.com) -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vis</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+<audio class="audio" src="audio/Formation.mp3" controls type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<div class="background"></div>
+<div class="track-title"></div>
+<div class="visualizer-container"></div>
+<script>
+    (function () {
+        // Spiral layout settings
+        const NBR_OF_BARS = 60;
+        const ANGLE_STEP_DEG = 17;     // degrees between bars — higher = tighter spiral
+        const RADIUS_BASE = 20;        // px, distance of first bar from center
+        const RADIUS_GROWTH = 3.5;     // px added per degree of rotation
+        const BAR_WIDTH = 2;           // px
+        const BAR_MAX_LENGTH = 70;     // px, full length at max amplitude
+
+        const audio = document.querySelector("audio");
+        const ctx = new AudioContext();
+        const audioSource = ctx.createMediaElementSource(audio);
+        const analyzer = ctx.createAnalyser();
+        analyzer.fftSize = 2048;
+        audioSource.connect(analyzer);
+        audioSource.connect(ctx.destination);
+        const frequencyData = new Uint8Array(analyzer.frequencyBinCount);
+
+        const visualizerContainer = document.querySelector(".visualizer-container");
+        const bars = [];
+
+        for (let i = 0; i < NBR_OF_BARS; i++) {
+            const angleDeg = i * ANGLE_STEP_DEG;
+            const angleRad = angleDeg * Math.PI / 180;
+            const radius = RADIUS_BASE + RADIUS_GROWTH * angleDeg / 10;
+
+            const x = radius * Math.cos(angleRad);
+            const y = radius * Math.sin(angleRad);
+
+            const bar = document.createElement("div");
+            bar.className = "visualizer-container__bar";
+            bar.style.left = x + "px";
+            bar.style.top = (y - BAR_MAX_LENGTH) + "px";
+            bar.style.width = BAR_WIDTH + "px";
+            bar.style.height = BAR_MAX_LENGTH + "px";
+            // rotate to point outward, then scale length via renderFrame
+            bar.dataset.angle = angleDeg + 90;
+
+            visualizerContainer.appendChild(bar);
+            bars.push(bar);
+        }
+
+        function renderFrame() {
+            analyzer.getByteFrequencyData(frequencyData);
+            for (let i = 0; i < NBR_OF_BARS; i++) {
+                // spread across the lower/mid spectrum, where most visible energy lives
+                const index = Math.floor((i / NBR_OF_BARS) * 300);
+                const fd = frequencyData[index] || 0;
+                const scale = Math.max(0.15, fd / 255); // 0.15 min so quiet bars stay visible
+                const angle = bars[i].dataset.angle;
+                bars[i].style.transform = `rotate(${angle}deg) scaleY(${scale})`;
+            }
+            window.requestAnimationFrame(renderFrame);
+        }
+        renderFrame();
+
+        audio.volume = 0.10;
+
+        audio.addEventListener("play", () => {
+            if (ctx.state === "suspended") {
+                ctx.resume();
+            }
+        });
+    })();
+</script>
+</body>
+</html>

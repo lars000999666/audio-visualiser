@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+.background {
+    position: absolute;
+    background-color: rgba(41, 42, 51, 0.761);
+    top: -50px;
+    right: -50px;
+    bottom: -50px;
+    left: -50px;
+    background-position: center center;
+    background-size: cover;
+    filter: blur(15px);
+}
+
+.track-title {
+    position: absolute;
+    top: 10vh;
+    right: 0;
+    left: 0;
+    color: white;
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+    font-size: 6vw;
+    text-align: center;
+}
+.visualizer-container {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    width: 0;
+    height: 0;
+}
+.visualizer-container__bar {
+    position: absolute;
+    background: rgb(223, 221, 221);
+    border-radius: 2px;
+    transform-origin: 50% 100%;
+    transition: transform 0.05s linear;
+}
+audio {
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    top: 1em;
+    z-index: 2;
+}
