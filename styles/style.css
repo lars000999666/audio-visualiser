@@ -54,11 +54,11 @@ audio {
     bottom: -20%;
     z-index: 1;
     pointer-events: none;
-    opacity: 0.75;
+    opacity: 0.85;
     mix-blend-mode: screen;
     background:
-        radial-gradient(circle at 20% 30%, rgba(275,275,255,0.5) 0%, rgba(255,255,255,0) 60%),
-        radial-gradient(circle at 75% 65%, rgba(275,275,255,0.4) 0%, rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(circle at 75% 65%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 55%),
         radial-gradient(circle at 50% 80%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%);
     filter: blur(30px);
     animation: smokeDrift 40s ease-in-out infinite alternate;
