@@ -57,7 +57,7 @@ body {
     width: 0;
     height: 0;
 
-    animation: spiral 40s ease-in-out infinite alternate;
+    animation: spiral 80s ease-in-out infinite linear;
 }
 
 @keyframes spiral {
