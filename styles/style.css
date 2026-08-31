@@ -23,7 +23,7 @@
 }
 .visualizer-container {
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     top: 50vh;
     left: 50vw;
     width: 0;
