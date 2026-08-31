@@ -54,7 +54,7 @@ audio {
     bottom: -20%;
     z-index: 1;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.75;
     mix-blend-mode: screen;
     background:
         radial-gradient(circle at 20% 30%, rgba(275,275,255,0.5) 0%, rgba(255,255,255,0) 60%),
